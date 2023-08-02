@@ -1,4 +1,3 @@
 export let ssr = true
 
-export const load = async () => {
-}
+export const load = async () => {}
