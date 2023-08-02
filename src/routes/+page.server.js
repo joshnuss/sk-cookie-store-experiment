@@ -1,6 +1,4 @@
-export let ssr = false
+export let ssr = true
+
 export const load = async () => {
-	return {
-		name: 'Basic Template'
-	};
-};
+}

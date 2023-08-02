@@ -4,9 +4,9 @@ import { browser } from '$app/environment'
 let cookies
 
 export function persisted(key, initial) {
-	const raw = getCookie(key)
-	console.log({key, raw, initial})
-	const initialValue = raw ? JSON.parse(raw) : initial
+	const json = getCookie(key)
+	console.log({key, json, initial})
+	const initialValue = json ? JSON.parse(json) : initial
 	const store = writable(initialValue)
 
 	store.subscribe(value => {
@@ -31,26 +31,25 @@ function getCookie(key) {
 		  ?.split("=")[1];
 	}
 
-	console.log({ getCookie: cookies.getAll() })
 	return cookies.get(key)
 }
 
 function setCookie(key, value) {
-	console.log('setCookie', {key, value})
-	const raw = JSON.stringify(value)
+	const json = JSON.stringify(value)
+	console.log('setCookie', { key, value, json })
 	const expires = new Date()
 	expires.setFullYear(expires.getFullYear() + 1)
 	
 	if (browser) {
-		console.log('setting cookie ' + key)
-		console.log(`${key}=${raw}; Expires=${expires.toString()}; SameSite=Strict; Secure`)
-		document.cookie = `${key}=${raw}; Expires=${expires.toString()}; SameSite=Strict; Secure`;
+		document.cookie = `${key}=${json}; Expires=${expires.toString()}; SameSite=Strict; Secure; Path=/`;
 		return
 	}
 
-	cookies.set(key, raw, {
+	cookies.set(key, json, {
 		expires,
 		sameSite: true,
-		secure: true
+		secure: true,
+		httpOnly: false,
+		path: '/'
 	})
 }
