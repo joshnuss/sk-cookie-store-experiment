@@ -1,6 +1,12 @@
-import { storage } from './localStorage'
 import { writable } from 'svelte/store'
 import { browser } from '$app/environment'
+
+export let storage = undefined
+
+if (!browser) {
+  const { AsyncLocalStorage } = await import('node:async_hooks')
+  storage = new AsyncLocalStorage()
+}
 
 export function persisted(key, initial) {
   const json = getCookie(key)

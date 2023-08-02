@@ -1,5 +1,4 @@
-import { setCookies } from '$lib/cookieStore'
-import { storage } from '$lib/localStorage'
+import { storage } from '$lib/cookieStore'
 
 export function handle({ event, resolve }) {
   return storage.run(event.cookies, () => {
