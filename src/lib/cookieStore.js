@@ -5,7 +5,6 @@ let cookies
 
 export function persisted(key, initial) {
   const json = getCookie(key)
-  console.log({ key, json, initial })
   const initialValue = json ? JSON.parse(json) : initial
   const store = writable(initialValue)
 
@@ -36,7 +35,6 @@ function getCookie(key) {
 
 function setCookie(key, value) {
   const json = JSON.stringify(value)
-  console.log('setCookie', { key, value, json })
   const expires = new Date()
   expires.setFullYear(expires.getFullYear() + 1)
 
