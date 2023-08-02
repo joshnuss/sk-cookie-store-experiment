@@ -1,7 +1,6 @@
+import { storage } from './localStorage'
 import { writable } from 'svelte/store'
 import { browser } from '$app/environment'
-
-let cookies
 
 export function persisted(key, initial) {
   const json = getCookie(key)
@@ -15,13 +14,6 @@ export function persisted(key, initial) {
   return store
 }
 
-export function setCookies(value) {
-  if (browser) {
-    throw Error('server only')
-  }
-  cookies = value
-}
-
 function getCookie(key) {
   if (browser) {
     return document.cookie
@@ -30,7 +22,7 @@ function getCookie(key) {
       ?.split('=')[1]
   }
 
-  return cookies.get(key)
+  return serverCookies().get(key)
 }
 
 function setCookie(key, value) {
@@ -43,11 +35,15 @@ function setCookie(key, value) {
     return
   }
 
-  cookies.set(key, json, {
+  serverCookies().set(key, json, {
     expires,
     sameSite: true,
     secure: true,
     httpOnly: false,
     path: '/'
   })
+}
+
+export function serverCookies() {
+  return storage.getStore()
 }
